@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Mirror OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mirror-dim: rgba(255, 255, 255, 0.4);
+            --mirror-bright: rgba(255, 255, 255, 0.9);
+        }
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            cursor: none;
+            -webkit-font-smoothing: antialiased;
+        }
+        .mirror-text {
+            color: var(--mirror-bright);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Subtle Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 100;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        /* Boot Loading Animation */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out;
+        }
+        .boot-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #0f0;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="boot-text" id="boot-msg">INITIALIZING SYSTEM...</div>
+    </div>
+    <div id="root"></div>
+    <script>
+        const messages = [
+            "CONNECTING TO NEURAL NETWORK...",
+            "FETCHING LOCAL WEATHER DATA...",
+            "SYNCING TfL ARRIVAL TIMES...",
+            "PREPARING CALENDAR MODULE...",
+            "AUTHENTICATING GEMINI API...",
+            "SYSTEM READY."
+        ];
+        let i = 0;
+        const msgEl = document.getElementById('boot-msg');
+        const interval = setInterval(() => {
+            if(i < messages.length) {
+                msgEl.innerText = messages[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                setTimeout(() => {
+                    const loader = document.getElementById('loader');
+                    if(loader) loader.style.opacity = '0';
+                    setTimeout(() => loader?.remove(), 800);
+                }, 500);
+            }
+        }, 400);
+    </script>
+</body>
+</html>

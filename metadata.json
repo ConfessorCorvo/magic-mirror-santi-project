@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Smart Magic Mirror",
+  "description": "A high-end, futuristic Magic Mirror interface designed for Raspberry Pi. Features real-time weather, TfL transit status, shared calendar, workout tracking, YouTube Music integration, and a Gemini-powered daily briefing.",
+  "requestFramePermissions": []
+}
