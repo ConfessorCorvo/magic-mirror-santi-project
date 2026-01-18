@@ -1,19 +1,28 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Train, Bus } from 'lucide-react';
 
-const TfLModule: React.FC = () => {
-  const [arrivals, setArrivals] = useState([
+interface TfLModuleProps {
+  lines: string[];
+}
+
+const TfLModule: React.FC<TfLModuleProps> = ({ lines }) => {
+  const [arrivals] = useState([
     { line: 'Northern', destination: 'High Barnet', minutes: 2 },
     { line: 'Northern', destination: 'Edgware', minutes: 7 },
-    { line: 'Northern', destination: 'Morden', minutes: 12 },
+    { line: 'Victoria', destination: 'Brixton', minutes: 4 },
   ]);
 
-  const [statuses, setStatuses] = useState([
+  const [statuses] = useState([
     { line: 'Northern', status: 'Good Service' },
     { line: 'Victoria', status: 'Minor Delays' },
     { line: 'Central', status: 'Good Service' },
+    { line: 'Piccadilly', status: 'Good Service' },
   ]);
+
+  // Filter based on config
+  const filteredStatuses = statuses.filter(s => lines.includes(s.line));
+  const filteredArrivals = arrivals.filter(a => lines.includes(a.line));
 
   return (
     <div className="w-full max-w-md mirror-text space-y-10">
@@ -21,7 +30,7 @@ const TfLModule: React.FC = () => {
         <h3 className="text-sm font-semibold opacity-30 uppercase tracking-[0.2em] flex items-center gap-3">
           <Train size={16} /> Transit Status
         </h3>
-        {statuses.map((s, i) => (
+        {filteredStatuses.map((s, i) => (
           <div key={i} className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className={`w-1.5 h-8 ${s.line === 'Northern' ? 'bg-zinc-800' : s.line === 'Victoria' ? 'bg-sky-500' : 'bg-red-600'}`}></div>
@@ -32,13 +41,14 @@ const TfLModule: React.FC = () => {
             </span>
           </div>
         ))}
+        {filteredStatuses.length === 0 && <p className="opacity-20 italic">No lines monitored</p>}
       </div>
 
       <div className="space-y-4">
         <h3 className="text-sm font-semibold opacity-30 uppercase tracking-[0.2em] flex items-center gap-3">
           <Bus size={16} /> Live Arrivals
         </h3>
-        {arrivals.map((a, i) => (
+        {filteredArrivals.map((a, i) => (
           <div key={i} className="flex justify-between items-center border-b border-white/5 pb-4">
             <div>
               <p className="text-xs opacity-40 mb-1">{a.line} Line</p>

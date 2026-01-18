@@ -3,20 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { getDailyBriefing } from '../services/geminiService';
 import { Sparkles } from 'lucide-react';
 
-const GeminiBriefing: React.FC = () => {
+interface GeminiBriefingProps {
+  userName: string;
+  persona: string;
+}
+
+const GeminiBriefing: React.FC<GeminiBriefingProps> = ({ userName, persona }) => {
   const [data, setData] = useState<{ greeting: string; focus: string } | null>(null);
 
   useEffect(() => {
     const fetchBriefing = async () => {
-      const result = await getDailyBriefing();
+      // Pass config to service for customized briefing
+      const result = await getDailyBriefing(userName, persona);
       setData(result);
     };
 
     fetchBriefing();
-    // Refresh every 4 hours
     const interval = setInterval(fetchBriefing, 4 * 60 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userName, persona]);
 
   if (!data) return (
     <div className="animate-pulse flex items-center gap-2 text-white/20">

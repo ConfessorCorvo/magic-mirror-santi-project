@@ -25,9 +25,27 @@ export interface NewsItem {
 }
 
 export interface CalendarEvent {
+  id: string;
   title: string;
   time: string;
   location?: string;
+  color: string;
+}
+
+export interface WorkoutExercise {
+  name: string;
+  sets: string;
+}
+
+export interface MirrorConfig {
+  userName: string;
+  persona: string;
+  tflLines: string[];
+  workout: {
+    day: string;
+    exercises: WorkoutExercise[];
+  };
+  events: CalendarEvent[];
 }
 
 export interface SongInfo {

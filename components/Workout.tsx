@@ -1,17 +1,16 @@
 
 import React from 'react';
 import { Dumbbell } from 'lucide-react';
+import { WorkoutExercise } from '../types';
 
-const Workout: React.FC = () => {
-  const routine = {
-    day: "Legs & Core",
-    exercises: [
-      { name: "Barbell Squats", sets: "4 x 8" },
-      { name: "Deadlifts", sets: "3 x 5" },
-      { name: "Plank", sets: "3 x 1 min" }
-    ]
+interface WorkoutProps {
+  routine: {
+    day: string;
+    exercises: WorkoutExercise[];
   };
+}
 
+const Workout: React.FC<WorkoutProps> = ({ routine }) => {
   return (
     <div className="w-80 mirror-text text-right">
       <h3 className="text-sm font-semibold opacity-50 uppercase flex items-center justify-end gap-2 mb-4">
